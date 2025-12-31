@@ -8,6 +8,10 @@ export default (err, req, res, next) => {
     const message = `This is invalid resource ${err.path}`;
     err = new ApiError(404, message);
   }
+  if (err.code === 11000) {
+    const key = Object.keys(err.keyValue)[0];
+    err = new ApiError(400, `${key} already exists`);
+  }
   return res.status(err.statusCode).json({
     success: false,
     message: err.message,
