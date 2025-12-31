@@ -4,6 +4,7 @@ import { catchAsync } from "../utils/catchAsync.js";
 import ApiError from "../utils/customError.js";
 
 export const createProduct = catchAsync(async (req, res, next) => {
+  req.body.user = req.user.id;
   const product = await Product.create(req.body);
   return res.status(201).json({
     success: true,

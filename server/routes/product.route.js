@@ -6,15 +6,18 @@ import {
   removeProduct,
   updateProduct,
 } from "../controllers/product.controller.js";
-import { isAuthenticated } from "../middlewares/auth.middleware.js";
+import {
+  isAuthenticated,
+  isAuthorized,
+} from "../middlewares/auth.middleware.js";
 const router = Router();
 router
   .route("/products")
   .get(isAuthenticated, getAllProducts)
-  .post(createProduct);
+  .post(isAuthenticated, isAuthorized("admin"), createProduct);
 router
   .route("/product/:id")
-  .put(updateProduct)
-  .delete(removeProduct)
-  .get(getSingleProduct);
+  .put(isAuthenticated, isAuthorized("admin"), updateProduct)
+  .delete(isAuthenticated, isAuthorized("admin"), removeProduct)
+  .get(isAuthenticated, getSingleProduct);
 export default router;
