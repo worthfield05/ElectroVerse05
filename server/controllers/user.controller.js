@@ -96,3 +96,41 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   await user.save();
   return setToken(200, "Password Reset Successfully", user, res);
 });
+
+export const getProfile = catchAsync(async (req, res, next) => {
+  const user = await User.findOne({ _id: req.user.id });
+  return res.status(200).json({
+    success: true,
+    message: "User details",
+    user,
+  });
+});
+
+export const updatePassword = catchAsync(async (req, res, next) => {
+  const { oldPassword, newPassword } = req.body;
+  const user = await User.findOne({ _id: req.user.id }).select("+password");
+  const checkPassword = await user.comparePassword(oldPassword);
+  if (!checkPassword) {
+    return next(new ApiError(400, "Old password is incorrect"));
+  }
+  user.password = newPassword;
+  await user.save();
+  return setToken(200, "Password Updated Successfully", user, res);
+});
+
+export const updateUser = catchAsync(async (req, res, next) => {
+  const { email, name } = req.body;
+  const updatedData = {
+    email,
+    name,
+  };
+  const user = await User.findByIdAndUpdate(req.user.id, updatedData, {
+    new: true,
+    runValidators: true,
+  });
+  return res.status(200).json({
+    success: true,
+    message: "User updated successfully",
+    user,
+  });
+});
