@@ -11,13 +11,13 @@ import {
   isAuthorized,
 } from "../middlewares/auth.middleware.js";
 const router = Router();
+router.route("/products").get(getAllProducts);
 router
-  .route("/products")
-  .get(isAuthenticated, getAllProducts)
+  .route("/admin/products")
   .post(isAuthenticated, isAuthorized("admin"), createProduct);
 router
-  .route("/product/:id")
+  .route("/admin/product/:id")
   .put(isAuthenticated, isAuthorized("admin"), updateProduct)
-  .delete(isAuthenticated, isAuthorized("admin"), removeProduct)
-  .get(isAuthenticated, getSingleProduct);
+  .delete(isAuthenticated, isAuthorized("admin"), removeProduct);
+router.route("/product/:id").get(getSingleProduct);
 export default router;

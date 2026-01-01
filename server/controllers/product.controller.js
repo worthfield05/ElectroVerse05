@@ -75,3 +75,16 @@ export const getSingleProduct = catchAsync(async (req, res, next) => {
     .status(200)
     .json({ success: true, message: "product found successfully", product });
 });
+
+//admin
+export const getProductList = catchAsync(async (req, res, next) => {
+  const products = await Product.find();
+  if (!products) {
+    return next(new ApiError(404, "Product not found"));
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Product found",
+    products,
+  });
+});

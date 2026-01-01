@@ -77,6 +77,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
     );
   }
 });
+
 export const resetPassword = catchAsync(async (req, res, next) => {
   const token = req.params.token;
   const resetPasswordToken = crypto
@@ -132,5 +133,61 @@ export const updateUser = catchAsync(async (req, res, next) => {
     success: true,
     message: "User updated successfully",
     user,
+  });
+});
+
+//admin
+export const getUserLists = catchAsync(async (req, res, next) => {
+  const users = await User.find();
+  if (!users) {
+    return next(new ApiError(404, "Users not found"));
+  }
+  return res.status(200).json({
+    success: true,
+    message: "All users found",
+    users,
+  });
+});
+
+export const getSingleUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ApiError(404, "User not found"));
+  }
+  return res.status(200).json({
+    success: true,
+    message: "User found",
+    user,
+  });
+});
+
+export const updateUserRole = catchAsync(async (req, res, next) => {
+  const { role } = req.body;
+  const newData = {
+    role,
+  };
+  const user = await User.findByIdAndUpdate(req.params.id, newData, {
+    new: true,
+    runValidators: true,
+  });
+  if (!user) {
+    return next(new ApiError(404, "User not found"));
+  }
+  return res.status(200).json({
+    success: true,
+    message: "User role successfully changed",
+    user,
+  });
+});
+
+export const removeUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    return next(new ApiError(404, "User not found"));
+  }
+  await User.findByIdAndDelete(req.params.id);
+  return res.status(200).json({
+    success: true,
+    message: "User remove successfully",
   });
 });
