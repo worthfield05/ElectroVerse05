@@ -1,9 +1,12 @@
 import { Router } from "express";
 import {
   createProduct,
+  createProductReview,
   getAllProducts,
+  getProductReviews,
   getSingleProduct,
   removeProduct,
+  removeReview,
   updateProduct,
 } from "../controllers/product.controller.js";
 import {
@@ -20,4 +23,6 @@ router
   .put(isAuthenticated, isAuthorized("admin"), updateProduct)
   .delete(isAuthenticated, isAuthorized("admin"), removeProduct);
 router.route("/product/:id").get(getSingleProduct);
+router.route("/review").put(isAuthenticated, createProductReview);
+router.route("/reviews").get(getProductReviews).delete(removeReview);
 export default router;
