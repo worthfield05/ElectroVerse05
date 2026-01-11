@@ -1,7 +1,29 @@
-import { API } from "./api";
+import axios from "axios";
+
 export default {
-  login: (credentials) => API.post("/auth/login", credentials),
-  register: (data) => API.post("/auth/register", data),
-  logout: () => API.post("/auth/logout"),
-  getProfile: () => API.get("/auth/profile"),
+  login: async (credentials) => {
+    const { data } = await axios.post("/api/v1/auth/login", credentials);
+    return data;
+  },
+  register: async (userData) => {
+    console.log(userData);
+    const { data } = await axios.post("/api/v1/auth/register", userData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return data;
+  },
+  logout: async () => {
+    const { data } = axios.post("/api/v1/auth/logout");
+    return data;
+  },
+  profile: async () => {
+    try {
+      const { data } = await axios.get("/api/v1/auth/profile", {
+        withCredentials: true,
+      });
+      return data;
+    } catch (err) {
+      throw new Error("Not authenticated");
+    }
+  },
 };
