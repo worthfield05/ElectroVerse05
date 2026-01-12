@@ -4,16 +4,27 @@ import ApiError from "../utils/customError.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import { setToken } from "../utils/token.js";
 import crypto from "node:crypto";
-
+import { v2 as cloudinary } from "cloudinary";
 export const register = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
+  // Validate file
+  if (!req.files || !req.files.avatar) {
+    return next(new ApiError(400, "Avatar file is required"));
+  }
+
+  const avatar = req.files.avatar;
+  const myCloud = await cloudinary.uploader.upload(avatar.tempFilePath, {
+    folder: "avatars",
+    width: 150,
+    crop: "scale",
+  });
   const user = new User({
     name,
     email,
     password,
     avatar: {
-      public_id: "this is temp",
-      url: "this is public url",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
   await user.save();

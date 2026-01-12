@@ -7,9 +7,7 @@ export default {
   },
   register: async (userData) => {
     console.log(userData);
-    const { data } = await axios.post("/api/v1/auth/register", userData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const { data } = await axios.post("/api/v1/auth/register", userData);
     return data;
   },
   logout: async () => {
