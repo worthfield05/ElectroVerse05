@@ -28,8 +28,15 @@ export const useLogin = () => {
   });
 };
 export const useLogout = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: auth.logout,
+    onSuccess: (data) => {
+      toast.success(data?.message || "custom message");
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      navigate("/login");
+    },
   });
 };
 export const useProfile = () => {

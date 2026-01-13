@@ -15,13 +15,9 @@ export default {
     return data;
   },
   profile: async () => {
-    try {
-      const { data } = await axios.get("/api/v1/auth/profile", {
-        withCredentials: true,
-      });
-      return data;
-    } catch (err) {
-      throw new Error("Not authenticated");
-    }
+    const { data } = await axios.get("/api/v1/auth/profile", {
+      withCredentials: true,
+    });
+    return data;
   },
 };

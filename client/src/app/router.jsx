@@ -17,17 +17,11 @@ import {
   Register,
 } from "./pages";
 import { AuthLayout, CheckoutLayout, RootLayout } from "./layouts";
-import { authLoader, protectedLoader } from "./loaders/authLoader";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route
-        path="/"
-        loader={protectedLoader}
-        element={<RootLayout />}
-        errorElement={<NotFound />}
-      >
+      <Route path="/" element={<RootLayout />} errorElement={<NotFound />}>
         <Route index element={<Home />} />
         <Route path="products" element={<Products />} />
         <Route path="products/:id" element={<ProductDetail />} />
@@ -38,7 +32,7 @@ export const router = createBrowserRouter(
       <Route path="/checkout" element={<CheckoutLayout />}>
         <Route index element={<Checkout />} />
       </Route>
-      <Route loader={authLoader} element={<AuthLayout />}>
+      <Route element={<AuthLayout />}>
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
       </Route>

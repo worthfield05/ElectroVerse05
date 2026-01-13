@@ -1,10 +1,19 @@
+import Loading from "@/components/common/Loading";
 import { Avatar } from "@/components/ui/avatar";
+import { useProfile } from "@/hooks/useAuth";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { GalleryVerticalEnd } from "lucide-react";
-import React from "react";
-import { Link, Outlet } from "react-router";
+import { Link, Navigate, Outlet } from "react-router";
 
 const AuthLayout = () => {
+  const { data: user, isLoading } = useProfile();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+  if (user) {
+    return <Navigate to={"/"} replace />;
+  }
+  console.log(isLoading);
   return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">

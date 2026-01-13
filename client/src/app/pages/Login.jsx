@@ -15,19 +15,15 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/schemas/auth.schema";
-import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin, useProfile } from "@/hooks/useAuth";
+import { useLogin } from "@/hooks/useAuth";
 import { Spinner } from "@/components/ui/spinner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import auth from "@/apis/auth";
 
 const Login = () => {
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -36,16 +32,10 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
   const { isError, isPending, mutate, error } = useLogin();
-  const { data: user, isLoading } = useProfile();
-
-  useEffect(() => {
-    if (user) navigate("/");
-  }, [user]);
 
   const onSubmit = (userData) => {
     mutate(userData);
   };
-  if (isLoading) return null;
   return (
     <div className="flex flex-col gap-6">
       <Card>

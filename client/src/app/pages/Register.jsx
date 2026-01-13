@@ -21,7 +21,6 @@ import { useRegister } from "@/hooks/useAuth";
 import { registerSchema } from "@/schemas/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircleIcon } from "lucide-react";
-import React from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link } from "react-router";
 
@@ -36,6 +35,7 @@ const Register = () => {
   });
   const avatar = useWatch({ control, name: "avatar" });
   const { isPending, mutate, isError, error } = useRegister();
+
   const onSubmit = (data) => {
     const form = new FormData();
     form.append("name", data.name);
@@ -44,6 +44,7 @@ const Register = () => {
     form.append("avatar", data.avatar[0]);
     mutate(form);
   };
+
   return (
     <div className=" flex flex-col ">
       <Card>
