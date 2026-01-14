@@ -6,10 +6,25 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { ShoppingCart, User } from "lucide-react";
 import { SidebarTrigger } from "../ui/sidebar";
 import SearchBar from "./SearchBar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "../ui/dropdown-menu";
+import {
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { Button } from "../ui/button";
+import { useLogout, useProfile } from "@/hooks/useAuth";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { data: user } = useProfile();
+  const { mutate: logout } = useLogout();
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 10;
@@ -25,7 +40,6 @@ const Navbar = () => {
     { name: "Profile", path: "/profile" },
   ];
   const cartCount = 3;
-
   return (
     <>
       <header
@@ -66,12 +80,58 @@ const Navbar = () => {
             </div>
             <div className="flex items-center gap-2 sm:gap-4">
               <SearchBar />
-              <Link
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button className={"hover:bg-neutral-600 cursor-pointer"}>
+                    <User className="w-5 h-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className={"w-56"}>
+                  <DropdownMenuLabel className="p-1 font-semibold">
+                    My Account
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuGroup>
+                    {user ? (
+                      <>
+                        <DropdownMenuItem>
+                          <Link to={"/profile"} className="w-full">
+                            Profile
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to={"/orders"} className="w-full">
+                            Order
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={logout}>
+                          Logout
+                        </DropdownMenuItem>
+                      </>
+                    ) : (
+                      <>
+                        <DropdownMenuItem>
+                          <Link to={"/login"} className="w-full">
+                            Login
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to={"/register"} className="w-full">
+                            Register
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {/* <Link
                 to={"/profile"}
                 className="hidden sm:flex p-2 hover:bg-neutral-100 rounded-lg transition-colors"
               >
                 <User className="w-5 h-5" />
-              </Link>
+              </Link> */}
               <Link className="relative p-2 hover:bg-neutral-100 rounded-lg transition-colors">
                 <ShoppingCart className="w-5 h-5" />
                 {cartCount > 0 && (

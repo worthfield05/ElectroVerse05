@@ -32,13 +32,21 @@ export const useLogout = () => {
   const navigate = useNavigate();
   return useMutation({
     mutationFn: auth.logout,
-    onSuccess: (data) => {
-      toast.success(data?.message || "custom message");
+    onSuccess: () => {
+      queryClient.setQueryData(["me"], null);
+      queryClient.removeQueries({ queryKey: ["me"] });
       queryClient.invalidateQueries({ queryKey: ["me"] });
       navigate("/login");
     },
   });
 };
 export const useProfile = () => {
-  return useQuery({ queryKey: ["me"], queryFn: auth.profile, retry: false });
+  return useQuery({
+    queryKey: ["me"],
+    queryFn: auth.profile,
+    retry: false,
+    throwOnError: (error) => {
+      return error.response?.status !== 401;
+    },
+  });
 };

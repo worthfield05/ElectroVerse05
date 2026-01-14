@@ -1,13 +1,14 @@
 import { Heart, ShoppingCart } from "lucide-react";
 import React from "react";
+import RatingStar from "./RatingStar";
 
-const ProductCard = () => {
+const ProductCard = ({ product }) => {
   return (
     <div className="group relative bg-white rounded-lg overflow-hidden border hover:border-neutral-300 hover:shadow-lg transition-all">
       <div className="relative aspect-square bg-neutral-100 overflow-hidden">
         <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
           <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full font-semibold">
-            d
+            sale
           </span>
           <span className="bg-red-600 text-white text-xs px-2 py-1 rounded-full font-semibold">
             -25%
@@ -17,7 +18,7 @@ const ProductCard = () => {
           <Heart className="w-4 h-4" />
         </button>
         <img
-          src=""
+          src={product?.image[0]?.url}
           alt="product.jpg"
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
@@ -29,14 +30,20 @@ const ProductCard = () => {
         </div>
       </div>
       <div className="p-4">
-        <p className="text-xs text-neutral-500 uppercase mb-1">Category</p>
-        <h3 className="font-medium text-sm mb-2 line-clamp-2">Iphone xs max</h3>
+        <p className="text-xs text-neutral-500 uppercase mb-1">
+          {product.category}
+        </p>
+        <h3 className="font-medium text-sm mb-2 line-clamp-2">
+          {product.name}
+        </h3>
         <div className="flex items-center gap-2 mb-2">
-          *****
-          <span className="text-xs text-neutral-500">(0)</span>
+          <RatingStar rating={product.ratings} />
+          <span className="text-xs text-neutral-500">
+            ({product.numOfReviews})
+          </span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-lg">Rs. 150</span>
+          <span className="font-semibold text-lg">Rs. ${product.price}</span>
           <span className="text-sm text-neutral-500 line-through">Rs 200</span>
         </div>
       </div>

@@ -11,13 +11,20 @@ export default {
     return data;
   },
   logout: async () => {
-    const { data } = axios.post("/api/v1/auth/logout");
+    const { data } = await axios.post("/api/v1/auth/logout");
     return data;
   },
   profile: async () => {
-    const { data } = await axios.get("/api/v1/auth/profile", {
-      withCredentials: true,
-    });
-    return data;
+    try {
+      const { data } = await axios.get("/api/v1/auth/profile", {
+        withCredentials: true,
+      });
+      return data;
+    } catch (error) {
+      if (error.response?.status === 401) {
+        return null;
+      }
+      throw error;
+    }
   },
 };

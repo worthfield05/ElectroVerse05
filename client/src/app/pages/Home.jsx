@@ -1,13 +1,6 @@
-import EmptyState from "@/components/ecommerce/EmptyState";
-import ProductCard from "@/components/ecommerce/ProductCard";
-import RatingStar from "@/components/ecommerce/RatingStar";
-import ProductDetailSkeleton, {
-  ProductGridSkeleton,
-} from "@/components/ecommerce/Skeletons";
 import {
   ArrowRight,
   Headphones,
-  Heart,
   Shield,
   ShoppingBag,
   Truck,
@@ -78,8 +71,11 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8">Shop by Category</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {["Electronics", "Clothing", "Home", "Books"].map((cat) => (
-              <div className="aspect-square bg-neutral-200 rounded-lg flex items-end p-6">
+            {["Electronics", "Clothing", "Home", "Books"].map((cat, idx) => (
+              <div
+                key={idx}
+                className="aspect-square bg-neutral-200 rounded-lg flex items-end p-6"
+              >
                 <h3 className="text-white font-semibold text-lg">{cat}</h3>
               </div>
             ))}
@@ -91,9 +87,9 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8">Featured Products</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {Array.from({ length: 4 }).map((_, i) => (
+            {/* {Array.from({ length: 4 }).map((_, i) => (
               <ProductCard key={i} />
-            ))}
+            ))} */}
           </div>
         </div>
       </section>
