@@ -2,16 +2,18 @@ import Loading from "@/components/common/Loading";
 import { Avatar } from "@/components/ui/avatar";
 import { useProfile } from "@/hooks/useAuth";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { Link, Navigate, Outlet } from "react-router";
+import { Link, Navigate, Outlet, useLocation } from "react-router";
+import { Toaster } from "sonner";
 
 const AuthLayout = () => {
   const { data: user, isLoading } = useProfile();
-
+  const location = useLocation();
+  const from = location?.state?.from || "/profile";
   if (isLoading) {
     return <Loading />;
   }
   if (user) {
-    return <Navigate to={"/"} replace />;
+    return <Navigate to={from} replace />;
   }
 
   return (
@@ -30,6 +32,7 @@ const AuthLayout = () => {
         </Link>
         <Outlet />
       </div>
+      <Toaster />
     </div>
   );
 };

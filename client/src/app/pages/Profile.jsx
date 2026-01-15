@@ -1,60 +1,45 @@
-import { Bell, CreditCard, MapPin, User } from "lucide-react";
+import Loading from "@/components/common/Loading";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { useProfile } from "@/hooks/useAuth";
+import { format } from "date-fns";
 import React from "react";
 
 const Profile = () => {
-  return (
-    <div className="bg-neutral-50 min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">My Account</h1>
-        <div className="grid md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-lg border p-4">
-            {[
-              { icon: User, label: "Account" },
-              { icon: MapPin, label: "Addresses" },
-              { icon: CreditCard, label: "Payment" },
-              { icon: Bell, label: "Notifications" },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-neutral-50">
-                  <Icon className="w-5 h-5" />
-                  <span>{item.label}</span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="md:col-span-3 bg-white rounded-lg border p-6">
-            <h2 className="text-xl font-semibold mb-6">Personal Information</h2>
+  const { data, isLoading } = useProfile();
+  if (isLoading) return <Loading />;
+  const user = data?.user || null;
+  const createdAt = user?.createdAt
+    ? format(new Date(user.createdAt), "PPP")
+    : "-";
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label htmlFor="" className="block text-sm font-medium mb-2">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2 border rounded-lg"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="" className="block text-sm font-medium mb-2">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-2 border rounded-lg"
-                  />
-                </div>
-              </div>
-              <button className="bg-neutral-900 text-white px-6 py-2 rounded-lg">
-                Save Changes
-              </button>
-            </div>
-          </div>
+  return (
+    <Card className="max-w-sm w-full mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-200">
+      <CardHeader className={"flex flex-col items-center gap-2 p-6"}>
+        <Avatar className={"w-24 h-24"}>
+          <AvatarImage src={user?.avatar?.url || "/logo.png"} />
+          <AvatarFallback>{user?.name}</AvatarFallback>
+        </Avatar>
+        <CardTitle className={"text-xl text-center"}>
+          {user?.name || "Anonymous"}
+        </CardTitle>
+        <CardDescription className={"text-sm text-center text-gray-500"}>
+          {user?.email || "No email provided"}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className={"px-6 py-4 border-t border-gray-100"}>
+        <div className="flex justify-between items-center">
+          <span className="text-gray-500 text-sm">Joined</span>
+          <span className="text-gray-800 font-medium text-sm">{createdAt}</span>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

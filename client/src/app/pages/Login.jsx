@@ -70,7 +70,10 @@ const Login = () => {
               <Field data-invalid={!!errors.password}>
                 <div className="flex items-center">
                   <FieldLabel>Password</FieldLabel>
-                  <Link className="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                  <Link
+                    to={"/forgot-password"}
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
                     Forgot your password?
                   </Link>
                 </div>

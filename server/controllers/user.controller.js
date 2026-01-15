@@ -53,6 +53,7 @@ export const logout = catchAsync((req, res, next) => {
 });
 
 export const forgotPassword = catchAsync(async (req, res, next) => {
+  console.log(req.body.email);
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
     return next(new ApiError(404, "User not found"));
@@ -66,7 +67,9 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
       new ApiError(400, "Could not save reset token, please try again later")
     );
   }
-  const url = `http://localhost/api/v1/reset-password/${resetToken}`;
+  const url = `${req.protocol}://${req.get(
+    "host"
+  )}/reset-password/${resetToken}`;
   const message = `please click link below to send password reset request ${url}`;
 
   try {
@@ -91,6 +94,7 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
 
 export const resetPassword = catchAsync(async (req, res, next) => {
   const token = req.params.token;
+  console.log(req.body.password);
   const resetPasswordToken = crypto
     .createHash("sha256")
     .update(token)
@@ -136,6 +140,23 @@ export const updateUser = catchAsync(async (req, res, next) => {
     email,
     name,
   };
+  if (req.files && req.files?.avatar) {
+    const user = await User.findById(req.user.id);
+    const imageId = user.avatar.public_id;
+    await cloudinary.uploader.destroy(imageId);
+    const myCloud = await cloudinary.uploader.upload(
+      req.files.avatar.tempFilePath,
+      {
+        folder: "avatars",
+        width: 150,
+        crop: "scale",
+      }
+    );
+    updatedData.avatar = {
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
+    };
+  }
   const user = await User.findByIdAndUpdate(req.user.id, updatedData, {
     new: true,
     runValidators: true,

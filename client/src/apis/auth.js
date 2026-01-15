@@ -6,7 +6,6 @@ export default {
     return data;
   },
   register: async (userData) => {
-    console.log(userData);
     const { data } = await axios.post("/api/v1/auth/register", userData);
     return data;
   },

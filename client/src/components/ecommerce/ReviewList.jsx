@@ -4,7 +4,7 @@ import { ThumbsUp } from "lucide-react";
 
 const ReviewList = () => {
   return (
-    <div className="max-w-4xl">
+    <div className="">
       <div className="text-2xl font-bold mb-6">Ratings & Reviews</div>
       <div className="bg-neutral-50 rounded-lg p-6 mb-6">
         <div className="flex items-center gap-8">

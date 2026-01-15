@@ -8,3 +8,6 @@ export { default as Orders } from "./Orders";
 export { default as Products } from "./Products";
 export { default as ProductDetail } from "./ProductDetail";
 export { default as Profile } from "./Profile";
+export { default as MyOrder } from "./MyOrder";
+export { default as EditProfile } from "./EditProfile";
+export { default as ChangePassword } from "./ChangePassword";

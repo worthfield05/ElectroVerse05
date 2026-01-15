@@ -1,6 +1,7 @@
 import { Heart, ShoppingCart } from "lucide-react";
 import React from "react";
 import RatingStar from "./RatingStar";
+import { Link } from "react-router";
 
 const ProductCard = ({ product }) => {
   return (
@@ -33,9 +34,12 @@ const ProductCard = ({ product }) => {
         <p className="text-xs text-neutral-500 uppercase mb-1">
           {product.category}
         </p>
-        <h3 className="font-medium text-sm mb-2 line-clamp-2">
+        <Link
+          to={`/products/${product._id}`}
+          className="font-medium text-sm mb-2 line-clamp-2"
+        >
           {product.name}
-        </h3>
+        </Link>
         <div className="flex items-center gap-2 mb-2">
           <RatingStar rating={product.ratings} />
           <span className="text-xs text-neutral-500">

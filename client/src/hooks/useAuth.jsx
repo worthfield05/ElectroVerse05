@@ -15,15 +15,12 @@ export const useRegister = () => {
   });
 };
 export const useLogin = () => {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: auth.login,
     onSuccess: (data) => {
       toast.success(data?.message || "Custom message");
       queryClient.invalidateQueries({ queryKey: ["me"] });
-      navigate("/");
     },
   });
 };
