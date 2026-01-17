@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils";
 import {
-  Bell,
   CreditCard,
   Key,
   LayoutDashboardIcon,
-  MapPin,
+  ShoppingBag,
   User,
 } from "lucide-react";
 import { NavLink, Outlet } from "react-router";
@@ -13,8 +12,8 @@ const tabs = [
   { icon: LayoutDashboardIcon, label: "Dashboard", url: "/profile" },
   { icon: User, label: "Edit Profile", url: "edit" },
   { icon: Key, label: "Change Password", url: "password-update" },
+  { icon: ShoppingBag, label: "Orders", url: "orders" },
   { icon: CreditCard, label: "Payment", url: "/payment" },
-  { icon: Bell, label: "Notifications", url: "/notifications" },
 ];
 
 const ProfileLayout = () => {

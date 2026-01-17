@@ -8,6 +8,7 @@ import {
   setShippingAddress,
 } from "@/hooks/useCart";
 import { useCartItem } from "@/hooks/useCartItem";
+import { useCreateOrder } from "@/hooks/useOrder";
 import {
   paymentSchema,
   shippingAddressSchema,
@@ -24,6 +25,7 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 const steps = [
   { id: 1, title: "Shipping", icon: Truck },
   { id: 2, title: "Confirm", icon: ShoppingBag },
@@ -32,8 +34,11 @@ const steps = [
 const Checkout = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDone, setIsDone] = useState(false);
+
+  const { mutate, isPending, isSuccess, isError, error } = useCreateOrder();
+
   const shippingDetails = getShippingAddress();
+
   const cartItems = getCart();
 
   const cartQueries = useCartItem();
@@ -61,7 +66,9 @@ const Checkout = () => {
       return {
         price: query.data.product.price,
         quantity: cartItems[index].quantity,
-        productId: query.data.product._id,
+        product: query.data.product._id,
+        name: query.data.product.name,
+        image: query.data.product.image[0].url,
       };
     })
     .filter(Boolean);
@@ -76,7 +83,7 @@ const Checkout = () => {
     let valid = false;
     if (currentStep === 1) {
       valid = await shippingForm.trigger();
-      console.log(shippingForm.getValues("address"));
+
       let shippingDetail = {
         country: shippingForm.getValues("country"),
         phone: shippingForm.getValues("phone"),
@@ -99,18 +106,36 @@ const Checkout = () => {
   };
 
   const onFinalSubmit = async () => {
-    const valid = await paymentForm.trigger();
-    if (!valid) return;
-
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsDone(true);
-    }, 1500);
+    const shippingInfo = {
+      address: shippingDetails.address,
+      city: shippingDetails.city,
+      country: shippingDetails.country,
+      pinCode: shippingDetails.pin,
+      phone: shippingDetails.phone,
+    };
+    const orderItems = cartSummaryItems;
+    const paymentInfo = {
+      id: Date.now().toString(36) + Math.random(),
+      status: "Processing",
+    };
+    const itemPrice = subtotal;
+    const taxPrice = tax;
+    const shippingPrice = 0;
+    const totalPrice = total;
+    mutate({
+      shippingInfo,
+      orderItems,
+      paymentInfo,
+      itemPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    });
   };
-  if (isDone) {
+
+  if (isSuccess) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-8">
+      <div className="flex flex-col items-center justify-center min-h-100 text-center p-8">
         <CheckCircle2 className="w-16 h-16 text-green-500 mb-4" />
         <h2 className="text-2xl font-bold">Success!</h2>
         <p className="text-gray-500">Your order has been placed.</p>
@@ -213,10 +238,10 @@ const Checkout = () => {
           ) : (
             <Button
               onClick={onFinalSubmit}
-              disabled={isSubmitting}
+              disabled={isPending}
               className="bg-green-600 hover:bg-green-700 text-white border-none"
             >
-              {isSubmitting ? (
+              {isPending ? (
                 <Loader2 className="animate-spin" />
               ) : (
                 "Complete Purchase"

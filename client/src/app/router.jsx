@@ -28,6 +28,8 @@ import {
 } from "./layouts";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import OrderLayout from "./layouts/OrderLayout";
+import OrderDetail from "./pages/OrderDetail";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,18 +39,22 @@ export const router = createBrowserRouter(
         <Route path="products" element={<Products />} />
         <Route path="products/:id" element={<ProductDetail />} />
         <Route path="cart" element={<Cart />} />
-        <Route path="orders" element={<Orders />} />
         <Route path="profile" element={<ProtectedLayout />}>
           <Route element={<ProfileLayout />}>
             <Route index element={<Profile />} />
-            <Route path="orders" element={<MyOrder />} />
+            <Route path="orders" element={<OrderLayout />}>
+              <Route index element={<Orders />} />
+              <Route path=":id" element={<OrderDetail />} />
+            </Route>
             <Route path="password-update" element={<ChangePassword />} />
             <Route path="edit" element={<EditProfile />} />
           </Route>
         </Route>
       </Route>
-      <Route path="/checkout" element={<CheckoutLayout />}>
-        <Route index element={<Checkout />} />
+      <Route path="/checkout" element={<ProtectedLayout />}>
+        <Route element={<CheckoutLayout />}>
+          <Route index element={<Checkout />} />
+        </Route>
       </Route>
       <Route element={<AuthLayout />}>
         <Route path="login" element={<Login />} />

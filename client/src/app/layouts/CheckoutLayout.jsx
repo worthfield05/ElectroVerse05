@@ -1,8 +1,11 @@
+import EmptyState from "@/components/ecommerce/EmptyState";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import React, { useState } from "react";
+import { useCartItem } from "@/hooks/useCartItem";
 import { Link, Outlet } from "react-router";
 
 const CheckoutLayout = () => {
+  const cartQueries = useCartItem();
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <header className="border-b bg-white sticky top-0 z-50">
@@ -20,7 +23,7 @@ const CheckoutLayout = () => {
         </div>
       </header>
       <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
-        <Outlet />
+        {cartQueries.length === 0 ? <EmptyState /> : <Outlet />}
         <p className="text-center mt-6 text-gray-400 uppercase tracking-widest text-[10px]">
           100% Secure Checkout Experience
         </p>

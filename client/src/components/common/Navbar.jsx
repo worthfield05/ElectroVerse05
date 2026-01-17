@@ -38,7 +38,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Products", path: "/products" },
-    { name: "Orders", path: "/orders" },
+    { name: "Orders", path: "/profile/orders" },
     { name: "Profile", path: "/profile" },
   ];
   return (
@@ -101,7 +101,7 @@ const Navbar = () => {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to={"/orders"} className="w-full">
+                          <Link to={"/profile/orders"} className="w-full">
                             Order
                           </Link>
                         </DropdownMenuItem>
@@ -127,12 +127,6 @@ const Navbar = () => {
                   </DropdownMenuGroup>
                 </DropdownMenuContent>
               </DropdownMenu>
-              {/* <Link
-                to={"/profile"}
-                className="hidden sm:flex p-2 hover:bg-neutral-100 rounded-lg transition-colors"
-              >
-                <User className="w-5 h-5" />
-              </Link> */}
               <Link
                 to={"/cart"}
                 className="relative p-2 hover:bg-neutral-100 rounded-lg transition-colors"
