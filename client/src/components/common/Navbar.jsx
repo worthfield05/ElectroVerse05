@@ -19,6 +19,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { Button } from "../ui/button";
 import { useLogout, useProfile } from "@/hooks/useAuth";
+import { getCart } from "@/hooks/useCart";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -33,13 +34,13 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  const cartCount = getCart();
 
   const navLinks = [
     { name: "Products", path: "/products" },
     { name: "Orders", path: "/orders" },
     { name: "Profile", path: "/profile" },
   ];
-  const cartCount = 3;
   return (
     <>
       <header
@@ -132,11 +133,14 @@ const Navbar = () => {
               >
                 <User className="w-5 h-5" />
               </Link> */}
-              <Link className="relative p-2 hover:bg-neutral-100 rounded-lg transition-colors">
+              <Link
+                to={"/cart"}
+                className="relative p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+              >
                 <ShoppingCart className="w-5 h-5" />
-                {cartCount > 0 && (
+                {cartCount.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-black text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
-                    {cartCount}
+                    {cartCount.length}
                   </span>
                 )}
               </Link>

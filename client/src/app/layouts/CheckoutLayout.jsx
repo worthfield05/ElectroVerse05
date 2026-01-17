@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import React from "react";
+import React, { useState } from "react";
 import { Link, Outlet } from "react-router";
 
 const CheckoutLayout = () => {
@@ -19,8 +19,11 @@ const CheckoutLayout = () => {
           <div className="text-sm text-neutral-500">Secure Checkout</div>
         </div>
       </header>
-      <main className="container mx-auto px-4 py-8">
+      <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
         <Outlet />
+        <p className="text-center mt-6 text-gray-400 uppercase tracking-widest text-[10px]">
+          100% Secure Checkout Experience
+        </p>
       </main>
     </div>
   );

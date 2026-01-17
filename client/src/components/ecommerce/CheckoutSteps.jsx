@@ -8,10 +8,10 @@ const CheckoutSteps = ({ currentStep }) => {
     { number: 3, label: "Review" },
   ];
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between w-full  ">
       {steps.map((step, index) => (
-        <div className="flex items-center flex-1" key={index}>
-          <div className="flex flex-col items-center relative">
+        <div className="flex items-center w-full" key={index}>
+          <div className="flex  flex-col items-center relative">
             <div
               className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold *:**:
                     

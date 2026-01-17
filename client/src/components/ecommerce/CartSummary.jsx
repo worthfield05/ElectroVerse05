@@ -1,5 +1,6 @@
 import { Lock } from "lucide-react";
 import React from "react";
+import { Link } from "react-router";
 
 const CartSummary = ({ items }) => {
   const subtotal = items.reduce(
@@ -26,10 +27,13 @@ const CartSummary = ({ items }) => {
         <span>Total</span>
         <span>Rs. {total.toFixed(2)}</span>
       </div>
-      <button className="w-full bg-neutral-900 text-white py-3 rounded-lg font-medium hover:bg-neutral-800 flex items-center justify-center gap-2">
+      <Link
+        to={"/checkout"}
+        className="w-full bg-neutral-900 text-white py-3 rounded-lg font-medium hover:bg-neutral-800 flex items-center justify-center gap-2"
+      >
         <Lock className="w-4 h-4" />
         Checkout
-      </button>
+      </Link>
     </div>
   );
 };
