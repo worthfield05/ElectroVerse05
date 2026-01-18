@@ -2,11 +2,36 @@ import Product from "../models/product.model.js";
 import ApiFunctionality from "../utils/ApiFunctionality.js";
 import { catchAsync } from "../utils/catchAsync.js";
 import ApiError from "../utils/customError.js";
+import { v2 as cloudinary } from "cloudinary";
 
 export const createProduct = catchAsync(async (req, res, next) => {
   req.body.user = req.user.id;
-  const product = await Product.create(req.body);
-  return res.status(201).json({
+
+  const images = [];
+
+  if (req.files && req.files.images) {
+    const files = Array.isArray(req.files.images)
+      ? req.files.images
+      : [req.files.images];
+
+    for (const file of files) {
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "products",
+      });
+
+      images.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+  }
+
+  const product = await Product.create({
+    ...req.body,
+    image: images,
+  });
+
+  res.status(201).json({
     success: true,
     message: "Product created successfully",
     product,
@@ -43,27 +68,64 @@ export const getAllProducts = catchAsync(async (req, res, next) => {
 });
 
 export const updateProduct = catchAsync(async (req, res, next) => {
-  let product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-
+  let product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ApiError(404, "Product not found"));
   }
+
+  const images = [];
+  if (req.files && req.files.images) {
+    for (const img of product.image) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+    const files = Array.isArray(req.files.images)
+      ? req.files.images
+      : [req.files.images];
+
+    for (const file of files) {
+      const result = await cloudinary.uploader.upload(file.tempFilePath, {
+        folder: "products",
+      });
+
+      images.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+  }
+  product = await Product.findByIdAndUpdate(
+    req.params.id,
+    { ...req.body, image: images },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
   return res
     .status(200)
     .json({ success: true, message: "product update successfully", product });
 });
 
 export const removeProduct = catchAsync(async (req, res, next) => {
-  let product = await Product.findByIdAndDelete(req.params.id);
+  const product = await Product.findById(req.params.id);
+
   if (!product) {
     return next(new ApiError(404, "Product not found"));
   }
-  return res
-    .status(200)
-    .json({ success: true, message: "Deleted successfully", product });
+
+  if (product.image && product.image.length > 0) {
+    for (const img of product.image) {
+      await cloudinary.uploader.destroy(img.public_id);
+    }
+  }
+
+  await product.deleteOne();
+
+  res.status(200).json({
+    success: true,
+    message: "Product and images deleted successfully",
+  });
 });
 
 export const getSingleProduct = catchAsync(async (req, res, next) => {
@@ -99,7 +161,7 @@ export const createProductReview = catchAsync(async (req, res, next) => {
   };
   const product = await Product.findById(productId);
   const existingProduct = product.reviews.find(
-    (review) => review.user.toString() === req.user.id.toString()
+    (review) => review.user.toString() === req.user.id.toString(),
   );
   if (existingProduct) {
     product.reviews.forEach((review) => {
@@ -143,7 +205,7 @@ export const removeReview = catchAsync(async (req, res, next) => {
     return next(new ApiError(404, "Product not found"));
   }
   const reviews = product.reviews.filter(
-    (review) => review._id.toString() !== req.query.id.toString()
+    (review) => review._id.toString() !== req.query.id.toString(),
   );
   let sum = 0;
   reviews.forEach((review) => {
@@ -162,7 +224,7 @@ export const removeReview = catchAsync(async (req, res, next) => {
     {
       new: true,
       runValidators: true,
-    }
+    },
   );
   return res.status(200).json({
     success: true,

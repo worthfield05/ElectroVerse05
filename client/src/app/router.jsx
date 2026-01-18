@@ -30,6 +30,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import OrderLayout from "./layouts/OrderLayout";
 import OrderDetail from "./pages/OrderDetail";
+import AdminLayout from "./layouts/AdminLayout";
+import Dashboard from "./pages/Dashboard";
+import ProductList from "./pages/admin/ProductList";
+import CreateProduct from "./pages/admin/CreateProduct";
+import UpdateProduct from "./pages/admin/UpdateProduct";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -62,7 +67,13 @@ export const router = createBrowserRouter(
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="reset-password/:token" element={<ResetPassword />} />
       </Route>
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="products" element={<ProductList />} />
+        <Route path="product/new" element={<CreateProduct />} />
+        <Route path="product/:id" element={<UpdateProduct />} />
+      </Route>
       <Route path="*" element={<NotFound />} />
-    </>
-  )
+    </>,
+  ),
 );

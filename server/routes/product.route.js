@@ -3,6 +3,7 @@ import {
   createProduct,
   createProductReview,
   getAllProducts,
+  getProductList,
   getProductReviews,
   getSingleProduct,
   removeProduct,
@@ -17,6 +18,7 @@ const router = Router();
 router.route("/products").get(getAllProducts);
 router
   .route("/admin/products")
+  .get(isAuthenticated, isAuthorized("admin"), getProductList)
   .post(isAuthenticated, isAuthorized("admin"), createProduct);
 router
   .route("/admin/product/:id")
