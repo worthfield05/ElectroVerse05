@@ -35,6 +35,8 @@ import Dashboard from "./pages/Dashboard";
 import ProductList from "./pages/admin/ProductList";
 import CreateProduct from "./pages/admin/CreateProduct";
 import UpdateProduct from "./pages/admin/UpdateProduct";
+import UserList from "./pages/admin/UserList";
+import UpdateUser from "./pages/admin/UpdateUser";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -72,6 +74,8 @@ export const router = createBrowserRouter(
         <Route path="products" element={<ProductList />} />
         <Route path="product/new" element={<CreateProduct />} />
         <Route path="product/:id" element={<UpdateProduct />} />
+        <Route path="users" element={<UserList />} />
+        <Route path="user/:id" element={<UpdateUser />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </>,

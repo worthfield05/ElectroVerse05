@@ -23,3 +23,28 @@ export const deleteAdminProduct = async (id) => {
   });
   return data;
 };
+
+export const getUserList = async () => {
+  const { data } = await axios.get("/api/v1/auth/admin/users");
+  return data;
+};
+export const getUserDetail = async (id) => {
+  const { data } = await axios.get(`/api/v1/auth/admin/user/${id}`);
+  return data;
+};
+
+export const updateUserRole = async ({ id, role }) => {
+  const { data } = await axios.put(
+    `/api/v1/auth/admin/user/${id}`,
+    { role },
+    { withCredentials: true },
+  );
+  return data;
+};
+
+export const deleteAdminUser = async (id) => {
+  const { data } = await axios.delete(`/api/v1/auth/admin/user/${id}`, {
+    withCredentials: true,
+  });
+  return data;
+};
