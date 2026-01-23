@@ -1,3 +1,4 @@
+import PageTitle from "@/components/common/PageTitle";
 import CartItem from "@/components/ecommerce/CartItem";
 import CartSummary from "@/components/ecommerce/CartSummary";
 import EmptyState from "@/components/ecommerce/EmptyState";
@@ -33,7 +34,7 @@ const Cart = () => {
     const cart = cartItems.map((item) => {
       if (item.productId !== productId) return item;
       const checkStock = cartSummaryItems.find(
-        (data) => item.productId === data.productId
+        (data) => item.productId === data.productId,
       );
       if (quantity > checkStock.inStock) {
         toast.error("Quantity cannot exceed product stock");
@@ -51,33 +52,36 @@ const Cart = () => {
   }
 
   return (
-    <div className="container mx-auto mt-4 grid lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2">
-        <h2 className="text-2xl font-bold mb-6">
-          Shopping Cart ({cartQueries?.length} items)
-        </h2>
-        <div className="bg-white rounded-lg border p-6">
-          {cartQueries.map((query, index) => {
-            if (query.isLoading)
-              return <ProductGridSkeleton key={index} count={3} />;
-            const product = query?.data?.product;
-            const quantity = cartItems[index].quantity;
-            return (
-              <CartItem
-                key={product._id}
-                item={product}
-                quantity={quantity}
-                onUpdate={updateQuantity}
-                onRemove={removeItem}
-              />
-            );
-          })}
+    <>
+      <PageTitle title={"Cart"} />
+      <div className="container mx-auto mt-4 grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <h2 className="text-2xl font-bold mb-6">
+            Shopping Cart ({cartQueries?.length} items)
+          </h2>
+          <div className="bg-white rounded-lg border p-6">
+            {cartQueries.map((query, index) => {
+              if (query.isLoading)
+                return <ProductGridSkeleton key={index} count={3} />;
+              const product = query?.data?.product;
+              const quantity = cartItems[index].quantity;
+              return (
+                <CartItem
+                  key={product._id}
+                  item={product}
+                  quantity={quantity}
+                  onUpdate={updateQuantity}
+                  onRemove={removeItem}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div>
+          <CartSummary items={cartSummaryItems} />
         </div>
       </div>
-      <div>
-        <CartSummary items={cartSummaryItems} />
-      </div>
-    </div>
+    </>
   );
 };
 

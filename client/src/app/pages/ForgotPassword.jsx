@@ -1,3 +1,4 @@
+import PageTitle from "@/components/common/PageTitle";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,43 +21,46 @@ const ForgotPassword = () => {
     mutate({ email });
   };
   return (
-    <Card className={"text-center"}>
-      <CardTitle className={"text-xl"}>Forgot Password</CardTitle>
-      <CardDescription>
-        Enter your email below to send reset password link
-      </CardDescription>
+    <>
+      <PageTitle title={"Forgot-Password"} />
+      <Card className={"text-center"}>
+        <CardTitle className={"text-xl"}>Forgot Password</CardTitle>
+        <CardDescription>
+          Enter your email below to send reset password link
+        </CardDescription>
 
-      <CardContent>
-        <form onSubmit={handleSubmit}>
-          <FieldGroup>
-            <Field>
-              <FieldLabel>Email</FieldLabel>
-              <Input
-                required
-                value={email}
-                name="email"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                type={"email"}
-                placeholder="me@example.com"
-              />
-              {isError && (
-                <Alert variant="destructive">
-                  <AlertCircleIcon />
-                  <AlertDescription>
-                    {error?.response?.data?.message || "An error occurred."}
-                  </AlertDescription>
-                </Alert>
-              )}
-            </Field>
-            <Button disabled={isPending} type="submit">
-              {isPending ? "Sending" : "Send"}
-            </Button>
-          </FieldGroup>
-        </form>
-      </CardContent>
-    </Card>
+        <CardContent>
+          <form onSubmit={handleSubmit}>
+            <FieldGroup>
+              <Field>
+                <FieldLabel>Email</FieldLabel>
+                <Input
+                  required
+                  value={email}
+                  name="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                  type={"email"}
+                  placeholder="me@example.com"
+                />
+                {isError && (
+                  <Alert variant="destructive">
+                    <AlertCircleIcon />
+                    <AlertDescription>
+                      {error?.response?.data?.message || "An error occurred."}
+                    </AlertDescription>
+                  </Alert>
+                )}
+              </Field>
+              <Button disabled={isPending} type="submit">
+                {isPending ? "Sending" : "Send"}
+              </Button>
+            </FieldGroup>
+          </form>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

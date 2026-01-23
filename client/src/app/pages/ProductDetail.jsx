@@ -1,3 +1,4 @@
+import PageTitle from "@/components/common/PageTitle";
 import ReviewList from "@/components/ecommerce/ReviewList";
 import ProductDetailSkeleton from "@/components/ecommerce/Skeletons";
 import { Button } from "@/components/ui/button";
@@ -78,131 +79,136 @@ const ProductDetail = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-white text-black">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Product Section */}
-        {isLoading ? (
-          <ProductDetailSkeleton />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-            {/* Images */}
+    <>
+      <PageTitle title={product?.name || "Products-Detail"} />
+      <div className="min-h-screen bg-white text-black">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          {/* Product Section */}
+          {isLoading ? (
+            <ProductDetailSkeleton />
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+              {/* Images */}
 
-            <div className="space-y-4 ">
-              <div className="bg-gray-100 aspect-square rounded-lg overflow-hidden border-2 border-black">
-                <img
-                  src={extra.images[selectedImage]}
-                  alt=""
-                  className="w-full h-full object-cover"
-                />
+              <div className="space-y-4 ">
+                <div className="bg-gray-100 aspect-square rounded-lg overflow-hidden border-2 border-black">
+                  <img
+                    src={extra.images[selectedImage]}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="grid  grid-cols-4 gap-4">
+                  {extra.images.map((img, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={cn(
+                        "aspect-square rounded-lg overflow-hidden border-2 transition-all",
+                        selectedImage === index
+                          ? "border-black "
+                          : "border-gray-300 hover:border-gray-500",
+                      )}
+                    >
+                      <img
+                        src={img}
+                        alt={`View ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid  grid-cols-4 gap-4">
-                {extra.images.map((img, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={cn(
-                      "aspect-square rounded-lg overflow-hidden border-2 transition-all",
-                      selectedImage === index
-                        ? "border-black "
-                        : "border-gray-300 hover:border-gray-500"
-                    )}
-                  >
-                    <img
-                      src={img}
-                      alt={`View ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-            {/* Product Info */}
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-4xl font-bold mb-4">{product?.name}</h1>
-                <div className="flex items-center gap-4 mb-4">
-                  {/* <Rating
+              {/* Product Info */}
+              <div className="space-y-6">
+                <div>
+                  <h1 className="text-4xl font-bold mb-4">{product?.name}</h1>
+                  <div className="flex items-center gap-4 mb-4">
+                    {/* <Rating
                   value={product.ratings}
                   interactive={false}
                   onRatingChange={onRatingChange}
                 /> */}
-                  <span className="text-gray-600">
-                    {product?.ratings} ({product?.numOfReviews}
-                    {product?.numOfReviews <= 1 ? " review" : " reviews"})
-                  </span>
-                </div>
-                <p className="text-5xl font-bold mb-6">Rs. {product?.price}</p>
-                <p className="text-gray-700 leading-relaxed mb-6">
-                  {product?.description}
-                </p>
-              </div>
-              <div className="border-t-2 border-b-2 border-black py-6 space-y-4">
-                <h3 className="font-bold text-lg">Key Features</h3>
-                <ul className="space-y-2">
-                  {extra.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-black rounded-full" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-4">
-                {product?.stock > 0 ? (
-                  <div className="text-green-900">
-                    In Stock ({product?.stock} available )
+                    <span className="text-gray-600">
+                      {product?.ratings} ({product?.numOfReviews}
+                      {product?.numOfReviews <= 1 ? " review" : " reviews"})
+                    </span>
                   </div>
-                ) : (
-                  <span className=" text-lg text-gray-800">Out of Stock</span>
-                )}
-              </div>
-              {product?.stock > 0 && (
+                  <p className="text-5xl font-bold mb-6">
+                    Rs. {product?.price}
+                  </p>
+                  <p className="text-gray-700 leading-relaxed mb-6">
+                    {product?.description}
+                  </p>
+                </div>
+                <div className="border-t-2 border-b-2 border-black py-6 space-y-4">
+                  <h3 className="font-bold text-lg">Key Features</h3>
+                  <ul className="space-y-2">
+                    {extra.features.map((feature, index) => (
+                      <li key={index} className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-black rounded-full" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <span className="font-bold">Quantity:</span>
-                    <div className="flex items-center border-2 border-black rounded-lg">
-                      <button
-                        onClick={() => handleQuantity("dec")}
-                        className="p-3 hover:bg-gray-100 transition-colors"
+                  {product?.stock > 0 ? (
+                    <div className="text-green-900">
+                      In Stock ({product?.stock} available )
+                    </div>
+                  ) : (
+                    <span className=" text-lg text-gray-800">Out of Stock</span>
+                  )}
+                </div>
+                {product?.stock > 0 && (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <span className="font-bold">Quantity:</span>
+                      <div className="flex items-center border-2 border-black rounded-lg">
+                        <button
+                          onClick={() => handleQuantity("dec")}
+                          className="p-3 hover:bg-gray-100 transition-colors"
+                        >
+                          <Minus className="w-5 h-5" />{" "}
+                        </button>
+                        <span className="px-6 font-bold">{quantity}</span>
+                        <button
+                          onClick={() => handleQuantity("inc")}
+                          className="p-3 hover:bg-gray-100 transition-colors"
+                        >
+                          <Plus className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <Button
+                        onClick={() => addToCart(id, quantity)}
+                        className={
+                          "flex-1 bg-black text-white hover:bg-gray-800 py-6 text-lg font-bold rounded-lg"
+                        }
                       >
-                        <Minus className="w-5 h-5" />{" "}
-                      </button>
-                      <span className="px-6 font-bold">{quantity}</span>
-                      <button
-                        onClick={() => handleQuantity("inc")}
-                        className="p-3 hover:bg-gray-100 transition-colors"
+                        <ShoppingCart className="mr-2 w-5 h-5" />
+                        Add to Cart
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className={
+                          "border-2 border-black hover:bg-gray-100 p-6 rounded-lg"
+                        }
                       >
-                        <Plus className="w-5 h-5" />
-                      </button>
+                        <Heart className="w-6 h-6" />
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex gap-4">
-                    <Button
-                      onClick={() => addToCart(id, quantity)}
-                      className={
-                        "flex-1 bg-black text-white hover:bg-gray-800 py-6 text-lg font-bold rounded-lg"
-                      }
-                    >
-                      <ShoppingCart className="mr-2 w-5 h-5" />
-                      Add to Cart
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className={
-                        "border-2 border-black hover:bg-gray-100 p-6 rounded-lg"
-                      }
-                    >
-                      <Heart className="w-6 h-6" />
-                    </Button>
-                  </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        )}
-        <ReviewList />
+          )}
+          <ReviewList />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

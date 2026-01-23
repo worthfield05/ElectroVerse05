@@ -1,3 +1,4 @@
+import PageTitle from "@/components/common/PageTitle";
 import OrderCard from "@/components/ecommerce/OrderCard";
 import { useGetMyOrder } from "@/hooks/useOrder";
 import React from "react";
@@ -31,14 +32,17 @@ const Orders = () => {
     },
   ];
   return (
-    <div className="max-w-4xl mx-auto mt-6">
-      <h2 className="text-2xl font-bold mb-6">Order History</h2>
-      <div className="space-y-4">
-        {data?.order?.map((order) => (
-          <OrderCard key={order._id} order={order} />
-        ))}
+    <>
+      <PageTitle title={"Orders"} />
+      <div className="max-w-4xl mx-auto mt-6">
+        <h2 className="text-2xl font-bold mb-6">Order History</h2>
+        <div className="space-y-4">
+          {data?.order?.map((order) => (
+            <OrderCard key={order._id} order={order} />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

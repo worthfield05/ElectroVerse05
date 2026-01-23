@@ -1,3 +1,4 @@
+import PageTitle from "@/components/common/PageTitle";
 import {
   ArrowRight,
   Headphones,
@@ -27,6 +28,7 @@ const features = [
 const Home = () => {
   return (
     <>
+      <PageTitle title={"ElectroVerse"} />
       <section className="bg-neutral-900 text-white py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl">
